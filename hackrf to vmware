@@ -1,0 +1,25 @@
+diff --git "a/C:\\Users\\JIANG_~1\\AppData\\Local\\Temp\\TortoiseGit\\hac7318.tmp\\hackrf-a1b8535-left.c" "b/C:\\Users\\jiang_000\\Desktop\\hackrf\\host\\libhackrf\\src\\hackrf.c"
+index 2902a80..53b0259 100644
+--- "a/C:\\Users\\JIANG_~1\\AppData\\Local\\Temp\\TortoiseGit\\hac7318.tmp\\hackrf-a1b8535-left.c"
++++ "b/C:\\Users\\jiang_000\\Desktop\\hackrf\\host\\libhackrf\\src\\hackrf.c"
+@@ -410,12 +410,15 @@ static int hackrf_open_setup(libusb_device_handle* usb_device, hackrf_device** d
+ 
+ 	//int speed = libusb_get_device_speed(usb_device);
+ 	// TODO: Error or warning if not high speed USB?
+-
++	int current_configuration = 0;
++	libusb_get_configuration(usb_device, &current_configuration);
++	if (current_configuration != 1){
+ 	result = libusb_set_configuration(usb_device, 1);
+-	if( result != 0 )
+-	{
+-		libusb_close(usb_device);
+-		return HACKRF_ERROR_LIBUSB;
++		if( result != 0 )
++		{
++			libusb_close(usb_device);
++			return HACKRF_ERROR_LIBUSB;
++		}
+ 	}
+ 
+ 	result = libusb_claim_interface(usb_device, 0);
